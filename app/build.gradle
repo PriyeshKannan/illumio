@@ -1,0 +1,73 @@
+
+plugins {
+    id 'application'
+    id 'jacoco'
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext{
+    jacocoVersion = "0.8.12"
+    pmdVersion = "7.0.0"
+    checkstyleVersion = "10.17.0"
+}
+dependencies {
+    implementation libs.log.slf4j
+    implementation libs.logback.classic
+    implementation libs.logback.core
+    implementation libs.commons.configuration2
+
+    runtimeOnly libs.logback.logstash
+    implementation libs.junit.jupiter.params
+    testImplementation libs.junit.jupiter
+    testImplementation libs.mockito
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
+}
+
+jacoco {
+    toolVersion = jacocoVersion
+}
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+    reports {
+        html.required = true
+        xml.required = true
+        csv.required = false
+    }
+}
+
+jacocoTestCoverageVerification{
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.41
+            }
+        }
+    }
+}
+
+application {
+    mainClass = 'org.illumino.FlowAnalyzerApplication'
+}
+
+test {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
+    testLogging {
+        showStandardStreams = true
+    }
+    onOutput { descriptor, event ->
+        logger.lifecycle("Test: " + descriptor + " produced standard out/err: " + event.message )
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification
