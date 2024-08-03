@@ -17,12 +17,10 @@ dependencies {
     implementation libs.log.slf4j
     implementation libs.logback.classic
     implementation libs.logback.core
-    implementation libs.commons.configuration2
 
     runtimeOnly libs.logback.logstash
     implementation libs.junit.jupiter.params
     testImplementation libs.junit.jupiter
-    testImplementation libs.mockito
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
@@ -49,14 +47,15 @@ jacocoTestCoverageVerification{
     violationRules {
         rule {
             limit {
-                minimum = 0.41
+                minimum = 0.56
             }
         }
     }
 }
 
 application {
-    mainClass = 'org.illumino.FlowAnalyzerApplication'
+    tasks.run.workingDir = rootProject.projectDir
+    mainClass = 'com.illumio.FlowLogAnalyzerApplication'
 }
 
 test {
