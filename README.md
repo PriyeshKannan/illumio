@@ -2,11 +2,25 @@
 
 The scope of the project is to analysis flow records and aggregate data for analysis based on port/tag.
 
-Due to time limitation only `FlowLog` version `2` is implemented.
 
 ## Design
 
 The program execution is a written from perspective of a like a single batch process which reads a file, processes the data and generates a the necessary report.
+
+
+![Design](./docs/design.png)
+
+The design is considered as a stream of events being continously processed and aggregated but for simplicity a simple java application does all the handling of interaction and processing and persistence.
+
+### Assumption/Constraints
+
+1. Single Process process execution
+2. No third party or open source runtime software is used.
+3. No use of third party exception here is logging , unit testing libraries are used for dev and gradle is used for build.
+4. Due to time limitation only `FlowLog` version `2` is implemented.
+
+
+In the implemnentation `FlowlogAnalyerApplication` is like broker which parses the logs event stream and sends the event to subscriber. The event stream here is reading the flow log file line by line.
 
 
 ## Development
